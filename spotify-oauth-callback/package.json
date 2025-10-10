@@ -1,0 +1,17 @@
+{
+  "name": "spotify-oauth-callback-server",
+  "description": "Simple Flask server for handling Spotify OAuth callbacks for Discord bots",
+  "version": "1.0.0",
+  "main": "app.py",
+  "scripts": {
+    "start": "python app.py",
+    "dev": "python app.py"
+  },
+  "dependencies": {
+    "flask": "^2.3.3",
+    "gunicorn": "^21.2.0"
+  },
+  "engines": {
+    "python": "3.9"
+  }
+}

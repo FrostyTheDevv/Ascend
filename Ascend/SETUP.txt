@@ -1,0 +1,143 @@
+========================================
+ASCEND - Discord Music Bot Setup Guide
+========================================
+
+STEP 1: LAVALINK SERVER SETUP
+------------------------------
+1. Download Lavalink.jar from: https://github.com/lavalink-devs/Lavalink/releases
+   (Use Lavalink v4.0 or newer)
+   
+2. Create application.yml in the same directory as Lavalink.jar:
+
+server:
+  port: 2333
+  address: 0.0.0.0
+
+lavalink:
+  server:
+    password: "youshallnotpass"
+    sources:
+      youtube: true
+      bandcamp: true
+      soundcloud: true
+      twitch: true
+      vimeo: true
+      http: true
+      local: false
+    bufferDurationMs: 400
+    frameBufferDurationMs: 5000
+    youtubePlaylistLoadLimit: 6
+    playerUpdateInterval: 5
+    youtubeSearchEnabled: true
+    soundcloudSearchEnabled: true
+    gc-warnings: true
+
+metrics:
+  prometheus:
+    enabled: false
+    endpoint: /metrics
+
+sentry:
+  dsn: ""
+
+logging:
+  file:
+    max-history: 30
+    max-size: 1GB
+  path: ./logs/
+
+  level:
+    root: INFO
+    lavalink: INFO
+
+plugins:
+  lavasrc:
+    providers:
+      - "spsearch:%ISRC%"
+      - "spotify"
+    sources:
+      spotify: true
+    spotify:
+      clientId: "YOUR_SPOTIFY_CLIENT_ID"
+      clientSecret: "YOUR_SPOTIFY_CLIENT_SECRET"
+      countryCode: "US"
+  - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.2.0"
+    repository: "https://maven.lavalink.dev/releases"
+  - dependency: "com.github.topi314.sponsorblock:sponsorblock-plugin:3.0.0"
+    repository: "https://maven.lavalink.dev/releases"
+
+IMPORTANT: Replace YOUR_SPOTIFY_CLIENT_ID and YOUR_SPOTIFY_CLIENT_SECRET
+with your actual Spotify credentials from Step 3.
+
+3. Run Lavalink:
+   java -jar Lavalink.jar
+
+STEP 2: DISCORD BOT SETUP
+--------------------------
+1. Go to https://discord.com/developers/applications
+2. Create a new application
+3. Go to Bot section and create a bot
+4. Enable these Privileged Gateway Intents:
+   - MESSAGE CONTENT INTENT
+   - SERVER MEMBERS INTENT
+   - PRESENCE INTENT
+5. Copy the bot token
+
+STEP 3: SPOTIFY API SETUP
+--------------------------
+1. Go to https://developer.spotify.com/dashboard
+2. Create a new app
+3. Copy Client ID and Client Secret
+4. Add redirect URI: http://localhost:8888/callback
+
+STEP 4: ENVIRONMENT VARIABLES
+------------------------------
+Copy .env.example to .env and fill in your credentials:
+
+DISCORD_BOT_TOKEN=your_bot_token
+DISCORD_CLIENT_ID=your_client_id
+DISCORD_CLIENT_SECRET=your_client_secret
+
+SPOTIFY_CLIENT_ID=your_spotify_client_id
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+
+LAVALINK_HOST=localhost
+LAVALINK_PORT=2333
+LAVALINK_PASSWORD=youshallnotpass
+
+STEP 5: INVITE BOT TO SERVER
+-----------------------------
+1. Go to OAuth2 > URL Generator in Discord Developer Portal
+2. Select scopes: bot, applications.commands
+3. Select bot permissions: 
+   - Send Messages
+   - Embed Links
+   - Connect
+   - Speak
+   - Use Voice Activity
+4. Copy and visit the generated URL to invite the bot
+
+STEP 6: RUN THE BOT
+-------------------
+Terminal 1: java -jar Lavalink.jar
+Terminal 2: python main.py
+
+COMMANDS
+--------
+/play <query>           - Play a song from Spotify or search
+/pause                  - Pause playback
+/resume                 - Resume playback
+/skip                   - Skip current track
+/stop                   - Stop and clear queue
+/disconnect             - Leave voice channel
+/volume <0-100>         - Set volume
+/nowplaying             - Show current track
+/queue                  - Show queue
+/clear                  - Clear queue
+/shuffle                - Shuffle queue
+/loop <off/track/queue> - Set loop mode
+/remove <position>      - Remove track from queue
+/previous               - Play previous track
+/seek <seconds>         - Seek to position
+/spotify_playlist <url> - Play Spotify playlist
+/spotify_album <url>    - Play Spotify album
